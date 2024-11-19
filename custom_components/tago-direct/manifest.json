@@ -1,7 +1,7 @@
 {
   "domain": "tago-direct",
   "name": "Tago Direct",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/tago",
   "requirements": ["websocket-client==1.3.2"],

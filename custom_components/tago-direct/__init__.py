@@ -8,7 +8,7 @@ import homeassistant.helpers.config_validation as cv
 
 import logging
 import threading
-import time
+import asyncio
 import os
 from .tagoevents import TagoEvents
 from .const import DOMAIN, CONF_NET_BRIDGE_URL
@@ -79,7 +79,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if stop_event:
       logging.info('requesting stop')
       stop_event.set()
-      time.sleep(0.5)
+      await asyncio.sleep(0.5)
 
     return True
     

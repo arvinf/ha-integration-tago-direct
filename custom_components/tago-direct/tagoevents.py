@@ -22,19 +22,14 @@ class TagoEvents(object):
         if self.sock is not None:
             return
 
-        logging.info(f'Connecting to {self.host}:{self.port} for events')
-        self.sock= socket.create_connection((self.host, self.port))
+        logging.debug(f'Connecting to {self.host}:{self.port} for events')
+        self.sock= socket.create_connection(address=(self.host, self.port), timeout=3)
         self.sock.settimeout(None)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
         try:
             self.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 5)
             self.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 5)
             self.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 2)
-        except:
-            pass
-
-        try:
-            self.sock.setsockopt(socket.IPPROTO_TCP, TCP_KEEPALIVE, 5)
         except:
             pass
 
