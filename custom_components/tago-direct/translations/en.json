@@ -4,10 +4,11 @@
             "user": {
                 "title": "Tago Hub",
                 "data": {
-                    "rs485_bridge_url": "Modbus Bridge"
+                    "rs485_bridge_url": "Modbus Bridge",
+                    "is_legacy_tago": "Legacy TAGO Device"
                 },
                 "data_description": {
-                    "rs485_bridge_url": "The Modbus to TCP/IP bridge address host:port"
+                    "rs485_bridge_url": "The Modbus to TCP/IP bridge address host:port, or legacy TAGO device hostname or IP address"
                 }
             }
         },

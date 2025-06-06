@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any
-
+from urllib.parse import urlparse
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -13,32 +13,34 @@ from homeassistant.exceptions import HomeAssistantError
 
 from .const import (
     DOMAIN,
-    CONF_NET_BRIDGE_URL
+    CONF_NET_BRIDGE_URL,
+    CONF_IS_TAGO_LEGACY_DEVICE
 )
-
-_LOGGER = logging.getLogger(__name__)
-
-# TODO adjust the data schema to the data that you need
-DATA_SCHEMA = vol.Schema(
-    {vol.Required(CONF_NET_BRIDGE_URL, default=""): str}
-)
-
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Tago."""
     VERSION = 1
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Handle the initial step."""
         errors = {}
 
         if user_input is None:
-            _LOGGER.info('user input is none')
             return self.async_show_form(
-                step_id="user", data_schema=DATA_SCHEMA, errors=errors
+                step_id="user", data_schema=vol.Schema(
+                    {
+                        vol.Required(CONF_NET_BRIDGE_URL, default=""): str,
+                        vol.Optional(CONF_IS_TAGO_LEGACY_DEVICE, default=False): bool,
+                    }
+                ), errors=errors
             )
 
-        _LOGGER.info(f'user input is {user_input[CONF_NET_BRIDGE_URL]}')
-        return self.async_create_entry(title="Tago Direct", data=user_input)
+        url = user_input.get(CONF_NET_BRIDGE_URL)
+        is_legacy = user_input.get(CONF_IS_TAGO_LEGACY_DEVICE)
+        short_name = parsed = urlparse("//" + url).hostname
+        return self.async_create_entry(
+            title=f'Tago Direct {short_name}',
+            data={
+                CONF_NET_BRIDGE_URL: url,
+                CONF_IS_TAGO_LEGACY_DEVICE: is_legacy},
+        )
